@@ -15,6 +15,10 @@ class DataMap extends Model
         'complete' => 'complete',
         'error' => 'error',
     );
+    
+    
+    private $ChunkEventsRecord = null;
+    
 
     /**
      * TODO: Make this a shared trait.
@@ -27,6 +31,14 @@ class DataMap extends Model
             $model->id = (string)Uuid::generate(4);
         });
     }
+    
+    private static function initEventRecord()
+    {
+        if (is_null(self::$ChunkEventsRecord)) {
+            self::$ChunkEventsRecord = new ChunkEvents();
+        }
+    }
+    
 
     protected $table = 'data_maps';
     protected $fillable = [
@@ -160,6 +172,10 @@ class DataMap extends Model
 
         [$res_type, $updatedChunk] = BrokerNode::processNewChunk($brokerReq);
 
+        //record event
+        self::initEventRecord();
+        self::$ChunkEventsRecord->addChunkEvent("processing_chunk", "NA" , "todo", (string)($this->chunk_idx));
+        
         switch($res_type) {
             case 'already_attached':
                 // This will be marked as complete in the cron job.

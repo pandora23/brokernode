@@ -5,6 +5,9 @@ require_once("IriData.php");
 class NodeMessenger
 {
 
+    private $ChunkEventsRecord = null;
+    
+    
     public $headers = array(
         'Content-Type: application/json',
     );
@@ -16,6 +19,7 @@ class NodeMessenger
     {
 
         array_push($this->headers, $this->apiVersionHeaderString . IriData::$apiVersion);
+        self::$ChunkEventsRecord = new ChunkEvents();
     }
 
     public function sendMessageToNode($commandObject, $nodeUrl)
@@ -66,6 +70,11 @@ class NodeMessenger
             $cmd .= " > /dev/null 2>&1 &";
 
             exec($cmd);
+            
+            
+            //add event to record
+            self::$ChunkEventsRecord->addChunkEvent("chunk_sent_to_hook", $nodeUrl[$i], "todo", "spamHookNodesSection");
+            
         }
     }
 }
