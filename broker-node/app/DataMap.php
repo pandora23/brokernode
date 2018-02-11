@@ -17,7 +17,7 @@ class DataMap extends Model
     );
     
     
-    private $ChunkEventsRecord = null;
+    //private $ChunkEventsRecord = null;
     
 
     /**
@@ -32,12 +32,12 @@ class DataMap extends Model
         });
     }
     
-    private static function initEventRecord()
-    {
-        if (is_null(self::$ChunkEventsRecord)) {
-            self::$ChunkEventsRecord = new ChunkEvents();
-        }
-    }
+//     private static function initEventRecord()
+//     {
+//         if (is_null(self::$ChunkEventsRecord)) {
+//             self::$ChunkEventsRecord = new ChunkEvents();
+//         }
+//     }
     
 
     protected $table = 'data_maps';
@@ -173,8 +173,8 @@ class DataMap extends Model
         [$res_type, $updatedChunk] = BrokerNode::processNewChunk($brokerReq);
 
         //record event
-        self::initEventRecord();
-        self::$ChunkEventsRecord->addChunkEvent("processing_chunk", "NA" , "todo", (string)($this->chunk_idx));
+//         self::initEventRecord();
+//         self::$ChunkEventsRecord->addChunkEvent("processing_chunk", "NA" , "todo", (string)($this->chunk_idx));
         
         switch($res_type) {
             case 'already_attached':
